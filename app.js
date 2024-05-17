@@ -3,7 +3,7 @@ const config=require('./config/config.json');
 const {userRoute} = require('./user/routes');
 const {serviceRoute} = require('./service/routes');
 const app=express();
-const port=config['port']||process.env.port;
+const port=config['port']||process.env.port||5454;
 
 app.use(express.json());
 app.use(userRoute);
