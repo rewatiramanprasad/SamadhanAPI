@@ -62,11 +62,12 @@ const showUserProblem=async(req,res)=>{
 
 const addProposal=async(req,res)=>{
 
-  
+  try {
+    
 const { data, error } = await supabase
 .from('proposal')
 .insert([
-  { some_column: 'someValue', other_column: 'otherValue' },
+  req.body
 ])
 .select()
         
@@ -74,8 +75,11 @@ if(error){throw error}
 if(data){
   res.status(200).send(response(data, true,"data inserted successfully")).end();
 }
+  } catch (error) {
+    console.log(error)
+  }
 
 }
 
 
-module.exports={serviceLogin,serviceSignup,showUserProblem}
+module.exports={serviceLogin,serviceSignup,showUserProblem,addProposal}
