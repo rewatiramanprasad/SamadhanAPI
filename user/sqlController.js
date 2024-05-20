@@ -1,4 +1,5 @@
 const { supabase } = require("../utility/db");
+const { ValidationError } = require("../utility/errroHandler");
 
 const signupAuthSqlController = async (email, password, next) => {
   try {
@@ -6,10 +7,12 @@ const signupAuthSqlController = async (email, password, next) => {
       email: email,
       password: password,
     });
-    console.log(error, data);
+    // console.log(error, data);
+    if(error){throw error;}
     return data;
   } catch (error) {
-    console.log(error);
+    console.log("catch1",error.code);
+    next(new ValidationError("user already exist"))
   }
 };
 const signupSqlController = async (reqData, uid, next) => {
@@ -27,14 +30,15 @@ const signupSqlController = async (reqData, uid, next) => {
       ])
       .select();
     if (error) {
-      console.log(error);
+      // console.log(error);
       throw error;
     }
     if (data.length >= 1) {
       return data;
     }
   } catch (error) {
-    console.log(error);
+    console.log("catch2",error.code);
+    next(new ValidationError("user already exist"))
   }
 };
 

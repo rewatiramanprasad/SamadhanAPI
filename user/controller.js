@@ -19,27 +19,29 @@ const userLogin = async (req, res, next) => {
     }
     console.log(data);
     res.status(200).send(response(data, true, "login successful")).end();
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 const userSignup = async (req, res, next) => {
   try {
     const { email, password, name, mobile, location } = req.body;
     console.log(req.body);
-    // const singupAuth=await signupAuthSqlController(email,password,next);
+    const singupAuth=await signupAuthSqlController(email,password,next);
     let signupData;
-    // if(singupAuth.user!=null){
-    //     console.log(singupAuth.user.id)
+    if(singupAuth.user!=null){
+        console.log(singupAuth.user.id)
     signupData = await signupSqlController(
       req.body,
-      "0a611052-eaf0-457c-bac3-eb33e61ee316"
+      singupAuth.user.id
     );
 
-    // }
+    }
     if (signupData.length >= 1) {
       res
         .status(200)
-        .send(response([], true, "user created successfully"))
+        .send(response(signupData, true, "user created successfully"))
         .end();
     }
   } catch (error) {}
